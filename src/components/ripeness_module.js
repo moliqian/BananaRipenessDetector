@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
-var serverURL = "localhost:5000/"
+var serverURL = "http://localhost:5000/"
 
 export default class RipenessModule extends Component {
     constructor(props){
@@ -20,7 +20,7 @@ export default class RipenessModule extends Component {
             data.append('file', file)
             axios({
                 method: 'post',
-                url: serverURL,
+                url: serverURL + "upload",
                 data: data
               }).then(function(response) {
                   console.log("response!")
@@ -35,6 +35,7 @@ export default class RipenessModule extends Component {
                 <h3>Import your image!</h3>
                 <input type="file" onChange={this.handle_file_input}/>
             </form>
+            <img style={{width: '300px'}} src="http://localhost:5000/banana"></img>
         </div>
         );
     }
