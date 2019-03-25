@@ -4,7 +4,7 @@ Created on March 23, 2019
 
 ### About
 Open-ended project designed for CIS4720. Web application which detects and computes the ripeness of a banana.
-React.js used for the frontend and Python 3 used for the backend (image processing algorithm, file operations...)
+React.js used for the frontend and Python 3 used for the backend (image processing algorithm, file operations...).
 
 ### Running the webserver
 
@@ -21,7 +21,7 @@ React.js used for the frontend and Python 3 used for the backend (image processi
     ```
 * common errors
     * use 'set' instead of 'export' for Windows
-    * under PowerShell (ex. when using VS code) use following command
+    * under PowerShell (ex. when using VS code) use the following command
         ```
         $env:FLASK_APP = "server.py"
         flask run
@@ -36,7 +36,7 @@ React.js used for the frontend and Python 3 used for the backend (image processi
     ```
     
 ### Launching website
-* navigate to main git folder
+* navigate to root folder
 
     ```
     npm start
@@ -45,7 +45,7 @@ React.js used for the frontend and Python 3 used for the backend (image processi
 
 ### Notes:
 * Images can be most file types (ie. PNG, JPG, TIFF, etc)
-* Input image must have dimensions > 100px by 100px
+* Input image must have dimensions > 100 x 100 pixels
 * Libraries that must be updated:
     * numpy
     * PIL
