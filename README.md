@@ -27,7 +27,7 @@ React.js used for the frontend and Python 3 used for the backend (image processi
         flask run
         ```
       
-### update npm files
+### Updating npm files
 
 * delete "package-lock.json" file
     
@@ -35,7 +35,7 @@ React.js used for the frontend and Python 3 used for the backend (image processi
     npm install
     ```
     
-### launch website
+### Launching website
 * navigate to main git folder
 
     ```
@@ -45,7 +45,7 @@ React.js used for the frontend and Python 3 used for the backend (image processi
 
 ### Notes:
 * Images can be most file types (ie. PNG, JPG, TIFF, etc)
-* Input image must have dimensions > 100x100 px
+* Input image must have dimensions > 100px by 100px
 * Libraries that must be updated:
     * numpy
     * PIL
