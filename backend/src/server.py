@@ -86,7 +86,7 @@ def identifyBanana(template, image):
     found = None
 
     # loop over the scales of the image changed from 0.2 to 0.1 to make certain images more accurate
-    for scale in np.linspace(0.1, 1.0, 20)[::-1]:
+    for scale in np.linspace(0.1, 1.0, 100)[::-1]:
         # resize the image according to the scale, and keep track of the ratio of the resizing
         resized = imutils.resize(gray, width=int(gray.shape[1] * scale))
         r = gray.shape[1] / float(resized.shape[1])
@@ -132,13 +132,13 @@ def identifyBanana(template, image):
         # draw a bounding box around the detected result and display the image
         cv2.rectangle(original, (startX, startY), (endX, endY), (0, 0, 255), 2)
         if ripe == 1:
-            cv2.putText(original, "Ripe", (int((startX + endX) / 2.2), int(startY + ((endY - startY) * 0.1))),
+            cv2.putText(original, "Ripe", (int((startX + endX) / 2) - 30, startY-15),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 0, 255), 2)
         elif ripe == 0:
-            cv2.putText(original, "Overripe", (int((startX + endX) / 2.2), int(startY + ((endY - startY) * 0.1))),
+            cv2.putText(original, "Overripe", (int((startX + endX) / 2) - 40, startY-15),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 0, 255), 2)
         else:
-            cv2.putText(original, "Unripe", (int((startX + endX) / 2.2), int(startY + ((endY - startY) * 0.1))),
+            cv2.putText(original, "Unripe", (int((startX + endX) / 2) - 35, startY-15),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 0, 255), 2)
         return original
     
