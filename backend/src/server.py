@@ -152,7 +152,7 @@ def upload():
 def banana():
     inputImage = "Images/inputfile.jpg"
     img = cv2.imread(inputImage)
-    template = cv2.imread('Images/bananatemplatetest.jpg')
+    template = cv2.imread('Images/bananatemplatetest2.jpg')
     
     newImage = identifyBanana(template, img)
     
