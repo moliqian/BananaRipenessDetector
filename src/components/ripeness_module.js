@@ -9,7 +9,8 @@ export default class RipenessModule extends Component {
         this.state = {
             original_url: "http://localhost:5000/banana?",
             url: "http://localhost:5000/banana?",
-            index: 0
+            index: 0,
+            loading: false
         }
 
         this.handle_file_input = this.handle_file_input.bind(this)
@@ -17,10 +18,12 @@ export default class RipenessModule extends Component {
     handle_file_input(e){
         console.log(e.target.files[0])
         let file = e.target.files[0]
-        let refresh = false
-        let render = false
+        let refresh = false;
         let referenceToThis = this;
-        if(file){
+        if (file){
+            referenceToThis.setState({
+              loading: true
+            })
             let data = new FormData()
             data.append('file', file)
             axios({
@@ -32,7 +35,8 @@ export default class RipenessModule extends Component {
                   let url = referenceToThis.state.url
                   url = referenceToThis.state.original_url + today.getTime()
                   referenceToThis.setState({
-                    url: url
+                    url: url,
+                    loading: false
                   })
                   
                 //response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
@@ -52,7 +56,11 @@ export default class RipenessModule extends Component {
                 <input type="file" onChange={this.handle_file_input}/>
                 <div>{this.state.x}</div>
             </form>
-            <img style={{width: '300px'}} src={this.state.url} ></img>
+            {this.state.loading ? (
+                <img src={require('../loading.gif')}/ >
+            ) : 
+                <img style={{width: '300px'}} src={this.state.url}/ >
+            }
         </div>
         );
     }
