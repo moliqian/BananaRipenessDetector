@@ -59,7 +59,7 @@ export default class RipenessModule extends Component {
             {this.state.loading ? (
                 <img src={require('../loading.gif')}/ >
             ) : 
-                <img style={{width: '300px'}} src={this.state.url}/ >
+                <img style={{width: '800px', height: '500px', 'object-fit': 'contain'}} src={this.state.url}/ >
             }
         </div>
         );
