@@ -57,9 +57,9 @@ def checkRipeness(found, image, tW, tH):
         dst = cv2.bitwise_and(banana, banana, mask=mask)
         # cv2.imshow("bladh", dst)
         # cv2.imshow("bladh2", banana)
-        print(mse(banana, dst))
-        if mse(banana, dst) < 3000:
-            return 2  # not ripe
+        print("wahee" + str(mse(banana, dst)))
+        if mse(banana, dst) < 6500:
+            return 2  # unripe
         else:
             return 0  # overripe
 
@@ -70,53 +70,65 @@ def imageFix(image):
     dst = cv2.bitwise_and(image, image, mask=mask)  # generates image containing only yellow parts
     return dst
 
-def identifyBanana(template, image):
+def identifyBanana(templatePath, image):
     global ripe
-    # cv2.imshow("test", template)
-    template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
-    template = cv2.Canny(template, 50, 200)
-    (tH, tW) = template.shape[:2]
+    # global counter
+    dimensionMultiplier = 1  # for large input image cases, this var is used to label end image with correct x and y
+    mH = 0  # dimensions for best match found
+    mW = 0
 
-    # load the image, convert it to gray-scale, and initialize the
-    # bookkeeping variable to keep track of the matched region
+    (imageX) = image.shape[1]
     original = image
+
+    if imageX > 300:  # resize image if too large for better algorithm accuracy and runtime
+        r = 300.0 / imageX  # 1000 pixels divided by the image's width (to find ratio difference)
+        dim = (300, int(image.shape[0] * r))  # dimensions array containing new width and proper height
+        image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)  # resize method
+        # cv2.imshow("new?", image)
+        dimensionMultiplier = r
+        print('Resized')
+
     image = imageFix(image)  # get rid of most unnecessary colors except for yellow, brown, green colors
-    # cv2.imshow('blah', image)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     found = None
 
-    # loop over the scales of the image changed from 0.2 to 0.1 to make certain images more accurate
-    for scale in np.linspace(0.1, 1.0, 100)[::-1]:
-        # resize the image according to the scale, and keep track of the ratio of the resizing
-        resized = imutils.resize(gray, width=int(gray.shape[1] * scale))
-        r = gray.shape[1] / float(resized.shape[1])
+    for image_path in os.listdir(templatePath):
+        # create the full input path and read the file
+        input_path = os.path.join(templatePath, image_path)
+        template = cv2.imread(input_path)
 
-        # if the re-sized image is smaller than the template, then return error image
-        if resized.shape[0] < tH or resized.shape[1] < tW:
-            # image = cv2.imread('Images/imagefail.png')
-            # return image
-            break;
+        template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        template = cv2.Canny(template, 50, 200)
+        (tH, tW) = template.shape[:2]
+        print('initial ' + input_path)
+        # loop over the scales of the image changed from 0.2 to 0.1 to make certain images more accurate
+        for scale in np.linspace(0.1, 1, 50)[::-1]:
+            # resize the image according to the scale, and keep track of the ratio of the resizing
+            resized = imutils.resize(gray, width=int(gray.shape[1] * scale))
+            r = gray.shape[1] / float(resized.shape[1])
 
-        # detect edges in the re-sized, gray-scale image and apply template matching to find the template in the image
-        edged = cv2.Canny(resized, 50, 200)
-        # cv2.imshow("edged", edged)
-        result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF)
-        (minVal, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
+            # if the re-sized image is smaller than the template, then return error image
+            if resized.shape[0] < tH or resized.shape[1] < tW:
+                break
 
-        # if we have found a new maximum correlation value, then update the bookkeeping variable
-        if (found is None or maxVal > found[0]) and maxVal > 3000000:
-            # print('max: ' + str(maxVal))
-            found = (maxVal, maxLoc, r)
-            ripeness = checkRipeness(found, image, tW, tH)
-            if ripeness == 1:  # Comment out this line and the two below to disable simple clothes color check
-                ripe = 1
-            elif ripeness == 2:
-                ripe = 2
-            else:
-                ripe = 0
+            # detect edges in the re-scaled gray-scale image and use template matching to find the template image
+            edged = cv2.Canny(resized, 50, 200)
+            # cv2.imshow("edged", edged)
+            result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF)
+            (minVal, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
 
-    # unpack the bookkeeping variable and compute the (x, y) coordinates
-    # of the bounding box based on the re-sized ratio
+            # if we have found a new maximum correlation value, then update the bookkeeping variable
+            if (found is None or maxVal > found[0]) and maxVal > 3000000:
+                print('max: ' + str(maxVal))
+                # print('min: ' + str(minVal))
+                # > 4000000 good match
+                print(input_path)
+                found = (maxVal, maxLoc, r)
+                mH = tH
+                mW = tW
+
+        # unpack the bookkeeping variable and compute the (x, y) coordinates
+        # of the bounding box based on the re-sized ratio
 
     if found is None:
         # print('No banana found')
@@ -125,20 +137,29 @@ def identifyBanana(template, image):
         cv2.putText(original, "No banana found", (int(w/2)-95, int(h/4)), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
         return original
     else:
+        tW = mW
+        tH = mH
+        ripe = checkRipeness(found, image, tW, tH)
         (_, maxLoc, r) = found
         (startX, startY) = (int(maxLoc[0] * r), int(maxLoc[1] * r))
         (endX, endY) = (int((maxLoc[0] + tW) * r), int((maxLoc[1] + tH) * r))
 
+        # print(dimensionMultiplier)
+        startX = int(startX * (1/dimensionMultiplier))
+        startY = int(startY * (1/dimensionMultiplier))
+        endX = int(endX * (1/dimensionMultiplier))
+        endY = int(endY * (1/dimensionMultiplier))
+
         # draw a bounding box around the detected result and display the image
         cv2.rectangle(original, (startX, startY), (endX, endY), (0, 0, 255), 2)
         if ripe == 1:
-            cv2.putText(original, "Ripe", (int((startX + endX) / 2) - 30, startY-15),
+            cv2.putText(original, "Ripe", (int((startX + endX) / 2) - 30, startY+17),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 0, 255), 2)
         elif ripe == 0:
-            cv2.putText(original, "Overripe", (int((startX + endX) / 2) - 40, startY-15),
+            cv2.putText(original, "Overripe", (int((startX + endX) / 2) - 40, startY+17),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 0, 255), 2)
         else:
-            cv2.putText(original, "Unripe", (int((startX + endX) / 2) - 35, startY-15),
+            cv2.putText(original, "Unripe", (int((startX + endX) / 2) - 35, startY+17),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 0, 255), 2)
         return original
     
@@ -152,9 +173,9 @@ def upload():
 def banana():
     inputImage = "Images/inputfile.jpg"
     img = cv2.imread(inputImage)
-    template = cv2.imread('Images/bananatemplatetest2.jpg')
+    # template = cv2.imread('Images/bananatemplatetest2.jpg')
     
-    newImage = identifyBanana(template, img)
+    newImage = identifyBanana('template', img)
     
     #output file    
     cv2.imwrite("outputImage.jpg", newImage)
