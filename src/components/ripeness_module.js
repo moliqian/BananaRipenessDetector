@@ -100,7 +100,7 @@ export default class RipenessModule extends Component {
     render() {
         return (
         <div className="App">
-        <div style={divStyle}><p style={introStyle}>This web application computes the ripeness of a banana in an image. Upload your image below to test the algorithm out!</p></div>
+        <div style={divStyle}><p style={introStyle}>This web application computes the ripeness of a banana in an image. Upload your image below to test the algorithm out! In order to reduce computation times, upload photos with lower resolution.</p></div>
             {this.state.loading ? (
                 <img src={require('../loading.gif')}/ >
             ) : 
