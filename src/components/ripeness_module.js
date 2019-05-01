@@ -115,7 +115,7 @@ export default class RipenessModule extends Component {
             <div style={hrLine}></div>
             <div style={flexStyle}>
                  <div style={nameStyle}><a style={aS} href="https://giavinhlam.me" target="_blank">Giavinh Lam</a> - <a style={aS} href="http://www.petarkenic.host/" target="_blank">Petar Kenic</a> - <a style={aS}>Greg Hetherington</a></div>
-                 <div style={iconStyle}><a style={aS} href="https://github.com/peken97/BananaRipenessDetector" target="_blank"><i className="fab fa-github"></i></a> <a style={aS} href="https://github.com/peken97/BananaRipenessDetector/blob/master/CIS%204720%20FINAL%20REPORT%20-%20IMAGE.pdf" target="_blank"><i class="fas fa-info-circle"></i></a></div>
+                 <div style={iconStyle}><a style={aS} href="https://github.com/peken97/BananaRipenessDetector" target="_blank"><i className="fab fa-github"></i></a> <a style={aS} href="https://github.com/peken97/BananaRipenessDetector/blob/master/CIS%204720%20FINAL%20REPORT%20-%20IMAGE.pdf" target="_blank"><i className="fas fa-info-circle"></i></a></div>
             </div>
         </div>
         );
