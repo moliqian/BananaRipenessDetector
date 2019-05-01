@@ -6,6 +6,8 @@ Created on March 23, 2019
 Open-ended project designed for CIS4720. Web application which detects and computes the ripeness of a banana.
 React.js used for the frontend and Python 3 used for the backend (image processing algorithm, file operations...).
 
+React.js frontend deployed on xx.xx and Flask Web App (used as a server to handle requests) deployed using pythonanywhere.
+
 ### Running the webserver
 
 * install python dependencies
