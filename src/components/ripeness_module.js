@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
-var serverURL = "http://gv79.pythonanywhere.com/"
+var serverURL = "http://localhost:5000/"
 
 const introStyle = {
     fontFamily: 'Karla',
@@ -55,8 +55,8 @@ export default class RipenessModule extends Component {
     constructor(props){
         super()
         this.state = {
-            original_url: "http://gv79.pythonanywhere.com/banana?",
-            url: "http://gv79.pythonanywhere.com/banana?",
+            original_url: "http://localhost:5000/banana?",
+            url: "http://localhost:5000/banana?",
             index: 0,
             loading: false
         }
