@@ -6,7 +6,7 @@ Created on March 23, 2019
 Open-ended project designed for CIS4720. Web application which detects and computes the ripeness of a banana.
 React.js used for the frontend and Python 3 used for the backend (image processing algorithm, file operations...).
 
-React.js frontend deployed on http://stark-gorge-37151.herokuapp.com/ and Flask Web App (used as a server to handle requests) deployed using pythonanywhere.
+The React.js frontend is deployed on http://stark-gorge-37151.herokuapp.com/ (initial load may take long due to how free dynos work in Heroku) and the Python/Flask component (used as a server to handle requests and implements the banana ripeness detection algorithm) is deployed using pythonanywhere (on http://GV79.pythonanywhere.com).
 
 ### Running the webserver
 
