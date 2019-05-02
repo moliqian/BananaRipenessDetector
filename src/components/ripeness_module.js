@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import './ripeness.css';
 
 var serverURL = "http://gv79.pythonanywhere.com/"
 
